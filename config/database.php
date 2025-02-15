@@ -5,7 +5,7 @@ require_once __DIR__ . '/config.php'; // Load config with dotenv
 $DB_HOST = $_ENV['DB_HOST'] ?? 'localhost';
 $DB_USER = $_ENV['DB_USER'] ?? 'root';
 $DB_PASS = $_ENV['DB_PASS'] ?? '';
-$DB_NAME = $_ENV['DB_NAME'] ?? 'auth_api_project';
+$DB_NAME = $_ENV['DB_NAME'] ?? 'noteapp_hybrid';
 
 // Connect to MySQL
 $mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS);
