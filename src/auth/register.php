@@ -1,6 +1,7 @@
 <?php
 require_once '../config/database.php';
 require_once __DIR__. '/../models/User.php';
+require_once __DIR__. '/../utils/response.php'; // ✅ Include the helper
 
 header("Content-Type: application/json");
 
@@ -9,27 +10,23 @@ function register() {
 
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data['email']) || !isset($data['password'])) {
-        http_response_code(400);
-        echo json_encode(["message" => "Email and password are required"]);
-        return;
+        jsonResponse(400, "error", "Email and password are required");
     }
 
     $email = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
-    $password = password_hash($data['password'], PASSWORD_BCRYPT);
-
     if (!$email) {
-        http_response_code(400);
-        echo json_encode(["message" => "Invalid email format"]);
-        return;
+        jsonResponse(400, "error", "Invalid email format");
     }
 
+    $password = password_hash($data['password'], PASSWORD_BCRYPT);
     $user = new User($mysqli);
+
     if ($user->createUser($email, $password)) {
-        http_response_code(201);
-        echo json_encode(["message" => "User registered successfully"]);
+        jsonResponse(201, "success", "User registered successfully", [
+            "email" => $email
+        ]);
     } else {
-        http_response_code(500);
-        echo json_encode(["message" => "Registration failed"]);
+        jsonResponse(500, "error", "Registration failed");
     }
 }
 ?>

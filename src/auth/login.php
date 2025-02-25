@@ -1,7 +1,7 @@
 <?php
-// require_once '../config/database.php';
+require_once '../config/database.php';
 require_once __DIR__. '/../models/User.php';
-require_once '../vendor/autoload.php';
+require_once __DIR__. '/../utils/response.php'; // ✅ Include the helper
 
 use Firebase\JWT\JWT;
 
@@ -12,18 +12,14 @@ function login() {
 
     $data = json_decode(file_get_contents("php://input"), true);
     if (!isset($data['email']) || !isset($data['password'])) {
-        http_response_code(400);
-        echo json_encode(["message" => "Email and password are required"]);
-        return;
+        jsonResponse(400, "error", "Email and password are required");
     }
 
     $user = new User($mysqli);
     $userData = $user->getUserByEmail($data['email']);
 
     if (!$userData || !password_verify($data['password'], $userData['password'])) {
-        http_response_code(401);
-        echo json_encode(["message" => "Invalid email or password"]);
-        return;
+        jsonResponse(401, "error", "Invalid email or password");
     }
 
     $issuedAt = time();
@@ -42,11 +38,11 @@ function login() {
     $tokenModel = new Token($mysqli);
     $tokenModel->storeRefreshToken($userData['user_id'], $refreshToken, date("Y-m-d H:i:s", $issuedAt + 86400)); // 1 day expiry
 
-    http_response_code(200);
-    echo json_encode([
+    jsonResponse(200, "success", "Login successful", [
         "access_token" => $accessToken,
         "expires_in" => 3600,
-        "refresh_token" => $refreshToken
+        "refresh_token" => $refreshToken,
+        "email" => $data['email']
     ]);
 }
 ?>
