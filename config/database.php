@@ -4,7 +4,7 @@ require_once __DIR__ . '/config.php'; // Load config with dotenv
 // Load database credentials
 $DB_HOST = $_ENV['DB_HOST'] ?? 'localhost';
 $DB_USER = $_ENV['DB_USER'] ?? 'root';
-$DB_PASS = $_ENV['DB_PASS'] ?? '';
+$DB_PASS = $_ENV['DB_PASS'] ?? 'Mike!2020';
 $DB_NAME = $_ENV['DB_NAME'] ?? 'noteapp_hybrid';
 
 // Connect to MySQL

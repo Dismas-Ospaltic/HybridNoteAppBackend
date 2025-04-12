@@ -10,7 +10,8 @@ require_once __DIR__ . '/../noteManagement/addNote.php';
 header("Content-Type: application/json");
 
 // Get request URI relative to your project
-$requestUri = str_replace('/HybridNoteAppBackend', '', strtok($_SERVER['REQUEST_URI'], '?')); 
+$requestUri = str_replace('/HybridNoteAppBackend/public', '', strtok($_SERVER['REQUEST_URI'], '?')); 
+// $requestUri = str_replace(['/HybridNoteAppBackend/public', '/HybridNoteAppBackend'], '', strtok($_SERVER['REQUEST_URI'], '?'));
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
 switch ($requestUri) {
